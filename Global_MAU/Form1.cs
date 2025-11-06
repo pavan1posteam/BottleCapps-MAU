@@ -141,20 +141,22 @@ namespace Global_MAU
               
                     foreach (clsCategories cat in clscat)
                     {
-                    if (cat.sel==1) {
-                        depositCategory deposits = new depositCategory();
-                        if (cat.dep == 1)
+                        if (cat.catname == null) cat.catname = "";
+                        if (cat.sel==1) 
                         {
-                            deposits.catname = cat.catname;
-                            depositCategories.Add(deposits);
+                            depositCategory deposits = new depositCategory();
+                            if (cat.dep == 1)
+                            {
+                                deposits.catname = cat.catname;
+                                depositCategories.Add(deposits);
+                            }
+                            if (cat.catname.Contains("'"))
+                                cat.catname = cat.catname.Replace("'", "''");
+                            if (strcats.Length > 0)
+                                strcats += ",'" + cat.catname + "'";
+                            else
+                                strcats += "'" + cat.catname + "'";
                         }
-                        if (cat.catname.Contains("'"))
-                            cat.catname = cat.catname.Replace("'", "''");
-                        if (strcats.Length > 0)
-                            strcats += ",'" + cat.catname + "'";
-                        else
-                            strcats += "'" + cat.catname + "'";
-                    }
                     }
                     strcats1 = strcats;
                 
