@@ -132,6 +132,7 @@ namespace Global_MAU
                     {
                         foreach (var itm in clscat)
                         {
+                            if (itm.catname == null) itm.catname = "";
                             if (itm.catname.Contains("'"))
                                 itm.catname = itm.catname.Replace("'", "''").ToString();
                             DataRow row = dtCat.Select("catname='" + itm.catname.ToString() + "'").FirstOrDefault();

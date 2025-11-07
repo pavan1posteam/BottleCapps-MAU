@@ -142,20 +142,22 @@ namespace Global_MAU
               
                     foreach (clsCategories cat in clscat)
                     {
-                    if (cat.sel==1) {
-                        depositCategory deposits = new depositCategory();
-                        if (cat.dep == 1)
+                        if (cat.catname == null) cat.catname = "";
+                        if (cat.sel==1) 
                         {
-                            deposits.catname = cat.catname;
-                            depositCategories.Add(deposits);
+                            depositCategory deposits = new depositCategory();
+                            if (cat.dep == 1)
+                            {
+                                deposits.catname = cat.catname;
+                                depositCategories.Add(deposits);
+                            }
+                            if (cat.catname.Contains("'"))
+                                cat.catname = cat.catname.Replace("'", "''");
+                            if (strcats.Length > 0)
+                                strcats += ",'" + cat.catname + "'";
+                            else
+                                strcats += "'" + cat.catname + "'";
                         }
-                        if (cat.catname.Contains("'"))
-                            cat.catname = cat.catname.Replace("'", "''");
-                        if (strcats.Length > 0)
-                            strcats += ",'" + cat.catname + "'";
-                        else
-                            strcats += "'" + cat.catname + "'";
-                    }
                     }
                     strcats1 = strcats;
                 
@@ -334,6 +336,10 @@ namespace Global_MAU
                     continue;
                 }
                 pd.Qty = Convert.ToInt32(dt["qty"]);
+                if (storeid=="12499")
+                {
+                    pd.Qty =Convert.ToInt32( Regex.Replace(pd.Qty.ToString(), @"-", "") );
+                }
                 pd.StoreProductName = dt["StoreProductName"].ToString();
                 pd.StoreDescription = dt["StoreProductName"].ToString();
 
@@ -355,7 +361,7 @@ namespace Global_MAU
                     pd.End = dt["enddate"].ToString();
                 }
                 if (clsSettings.QtyPerPack)
-                    pd.Qty = pd.Qty / pd.pack;
+                    pd.Qty = pd.Qty / pd.pack; 
 
                 pd.Tax = Convert.ToDecimal(clsSettings.Tax);
                 pd.altupc1 = dt["altupc1"].ToString();
