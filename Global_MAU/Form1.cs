@@ -261,10 +261,19 @@ namespace Global_MAU
 
             if (clsSettings.StaticQuantity)
                 cmdstring.AppendLine(" " + clsSettings.StaticQtyvalue + " as qty, ");
-            else
+
+            // common for every store where if quantity is negative  it becomes 0  
+            /*else
             {
                 cmdstring.AppendLine(" CASE WHEN ISNULL(TRY_CAST(" + clsSettings.Qty + " AS INT),0) < 0 " +
                          " THEN 0 ELSE ISNULL(TRY_CAST(" + clsSettings.Qty + " AS INT),0) END AS qty, ");
+            }*/
+
+            // Take quantity as it is (-ve,+ve, 0 ) (added for 12499)
+            else
+            {
+
+                cmdstring.AppendLine(" ISNULL(TRY_CAST(" + clsSettings.Qty + " AS INT), 0) AS qty, ");
             }
             cmdstring.AppendLine(" CASE WHEN " + clsSettings.pack + " IS NULL THEN 1 ELSE " + clsSettings.pack + " END AS pack, ");
             cmdstring.AppendLine(" CASE WHEN " + clsSettings.uom + " IS NULL THEN '' ELSE " + clsSettings.uom + " END AS uom, ");
@@ -338,7 +347,8 @@ namespace Global_MAU
                 pd.Qty = Convert.ToInt32(dt["qty"]);
                 if (storeid=="12499")
                 {
-                    pd.Qty =Convert.ToInt32( Regex.Replace(pd.Qty.ToString(), @"-", "") );
+                    //pd.Qty =Convert.ToInt32( Regex.Replace(pd.Qty.ToString(), @"-", "") );  
+                    pd.Qty = Math.Abs(pd.Qty);   // -ve to  +ve 
                 }
                 pd.StoreProductName = dt["StoreProductName"].ToString();
                 pd.StoreDescription = dt["StoreProductName"].ToString();

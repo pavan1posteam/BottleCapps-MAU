@@ -26,7 +26,7 @@
     "region": null,
     "StaticQtyvalue": "0",
     "TableName": "Inventory a join Departments dd  on a.Dept_ID=dd.Dept_ID",
-    "Condition": "a.price > 0 and a.IsDeleted = 0 ",
+    "Condition": "a.price > 0 and a.IsDeleted = 0  and   a.In_Stock != '0' ",
     "StaticQuantity": false,
     "QtyPerPack": false,
     "cost": "N/A"
