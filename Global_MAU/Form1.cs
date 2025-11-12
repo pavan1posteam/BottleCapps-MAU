@@ -309,7 +309,7 @@ namespace Global_MAU
 
 
             // Execute query
-           // string test = cmdstring.ToString();
+            string test = cmdstring.ToString();
             DataTable dtresult = new DataTable();
             using (SqlConnection con = new SqlConnection(clsSettings.connectionString))
             using (SqlCommand cmd = new SqlCommand(cmdstring.ToString(), con))
@@ -339,12 +339,12 @@ namespace Global_MAU
                 pd.StoreDescription = dt["StoreProductName"].ToString();
 
                 pd.pack = Convert.ToInt32(dt["pack"].ToString());
-                if (pd.pack==1)
+                if (pd.pack==1 || pd.pack ==0)
                 {
                     pd.pack = getpack(dt["StoreProductName"].ToString());
                 }
                 pd.uom = dt["uom"].ToString();
-                if (string.IsNullOrEmpty(pd.uom))
+                if (string.IsNullOrEmpty(pd.uom) || pd.uom == "0")
                 {
                     pd.uom = getVolume(dt["StoreProductName"].ToString());
                 }

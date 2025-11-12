@@ -32,6 +32,7 @@ C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\bin\Debug\Global_MAU.exe
 C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\bin\Debug\Global_MAU.pdb
 C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\bin\Debug\Newtonsoft.Json.dll
 C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\bin\Debug\Newtonsoft.Json.xml
+C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\obj\Debug\Global_MAU.csproj.AssemblyReference.cache
 C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\obj\Debug\Global_MAU.BottleCapps.resources
 C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\obj\Debug\Global_MAU.FormSetting.resources
 C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\obj\Debug\Global_MAU.Properties.Resources.resources
