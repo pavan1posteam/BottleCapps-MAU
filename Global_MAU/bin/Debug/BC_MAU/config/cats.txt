@@ -1,0 +1,1 @@
+[{"sel":1,"dep":0,"catname":"Alcohol"},{"sel":1,"dep":0,"catname":"Beer"},{"sel":1,"dep":0,"catname":"Cider"},{"sel":1,"dep":0,"catname":"Mixers"},{"sel":1,"dep":0,"catname":"Ready to Pour"},{"sel":1,"dep":0,"catname":"Wine"}]

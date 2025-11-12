@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using Global_MAU.Models;
 using Newtonsoft.Json;
 
+
 namespace Global_MAU
 {
     public partial class BottleCapps : Form
@@ -335,6 +336,10 @@ namespace Global_MAU
                     continue;
                 }
                 pd.Qty = Convert.ToInt32(dt["qty"]);
+                if (storeid=="12499")
+                {
+                    pd.Qty =Convert.ToInt32( Regex.Replace(pd.Qty.ToString(), @"-", "") );
+                }
                 pd.StoreProductName = dt["StoreProductName"].ToString();
                 pd.StoreDescription = dt["StoreProductName"].ToString();
 
@@ -356,7 +361,7 @@ namespace Global_MAU
                     pd.End = dt["enddate"].ToString();
                 }
                 if (clsSettings.QtyPerPack)
-                    pd.Qty = pd.Qty / pd.pack;
+                    pd.Qty = pd.Qty / pd.pack; 
 
                 pd.Tax = Convert.ToDecimal(clsSettings.Tax);
                 pd.altupc1 = dt["altupc1"].ToString();
