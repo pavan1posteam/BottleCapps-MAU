@@ -306,7 +306,7 @@ namespace Global_MAU
                          " AS DECIMAL(18,2)) AS Cost ");
             cmdstring.AppendLine(" FROM " + clsSettings.TableName + "  ");
             cmdstring.AppendLine(" WHERE " + clsSettings.Price + " > 0 ");
-            if (!string.IsNullOrEmpty(clsSettings.Condition))
+            if (!string.IsNullOrEmpty(clsSettings.Condition)) 
                 cmdstring.AppendLine(" and " + " " + clsSettings.Condition +  strStock + strcats);   
             else if ((string.IsNullOrEmpty(strcats) && string.IsNullOrEmpty(strStock)))
                 cmdstring.AppendLine("");
