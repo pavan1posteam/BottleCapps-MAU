@@ -380,6 +380,10 @@ namespace Global_MAU
                 pd.altupc4 = dt["altupc4"].ToString();
                 pd.altupc5 = dt["altupc5"].ToString();
 
+                if (!string.IsNullOrEmpty(clsSettings.Discountable))
+                {
+
+                }
                 pd.deposit = depositCategories.Any(x => x.catname == dt["pcat"].ToString())? Convert.ToDecimal(dt["deposit"]): 0;
                 //  pd.deposit = Convert.ToDecimal(dt["deposit"]);
 
