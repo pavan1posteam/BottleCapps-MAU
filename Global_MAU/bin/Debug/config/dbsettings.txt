@@ -1,1 +1,1 @@
-{"server":"LAPTOP-0ET8LFP2","userid":"","pwd":"","database":"liquorapps","IntegratedSecurity":true}
+{"server":"PK-LAPTOP","userid":"","pwd":"","database":"liquorapps","IntegratedSecurity":true}

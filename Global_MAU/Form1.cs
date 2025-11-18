@@ -161,28 +161,30 @@ namespace Global_MAU
                     }
                     strcats1 = strcats;
                 
-                }
-                if (!string.IsNullOrWhiteSpace(clsSettings.pcat) && !clsSettings.pcat.Equals("N/A", StringComparison.OrdinalIgnoreCase))
+            }
+            if (!string.IsNullOrWhiteSpace(clsSettings.pcat) && !clsSettings.pcat.Equals("N/A", StringComparison.OrdinalIgnoreCase))
             {
                 if (strcats.Length > 0)
                 {
                    strcats = " AND " + clsSettings.pcat + " IN (" + strcats1 + ")";  
+                }
+                else
+                {
+                    strcats = "";
                 }
             }
             else
             {
                 strcats = "";
             }
-
             string strStock = "";
-
             string servername = System.Environment.MachineName.ToString();
             string connectionstring = clsSettings.connectionString;
             string storeid = clsSettings.StoreID;
             string tax = clsSettings.Tax;
             decimal markup = clsSettings.MarkUpPrice;
             decimal deposit = clsSettings.Deposit;
-
+            string POSName = clsSettings.LastPOSName;
 
             if (clsSettings.uom.Equals("N/A"))
                 clsSettings.uom = "''";
@@ -220,56 +222,21 @@ namespace Global_MAU
                 clsSettings.Condition = "";
             clsSettings.country = "''";
             clsSettings.region = "''";
-            if (string.IsNullOrEmpty(clsSettings.Condition) && clsSettings.stockeditems == 1)
+            if (clsSettings.stockeditems == 1)
                 strStock = " and " + clsSettings.Qty + " > 0 ";
-            else if (!string.IsNullOrEmpty(clsSettings.Condition) && clsSettings.stockeditems == 1)
-                strStock = " and " + clsSettings.Qty + " > 0 ";
-            if (string.IsNullOrEmpty(clsSettings.Condition) && clsSettings.stockeditems == 0)
-            {
-                if (clsSettings.pcat.Equals("''"))
-                    strcats = "";
-                else if (strcats.Length > 0)
-                    strcats = " and " + clsSettings.pcat + " in (" + strcats1 + ")";
-            }
+            else 
+                strStock = " ";
             StringBuilder cmdstring = new StringBuilder();
 
             cmdstring.AppendLine(" SELECT DISTINCT " + storeid + " AS storeid, ");
-
-
-            /*
-              // added these to for posnation/caps  pos   but throwing error for  EBS
-              
-              cmdstring.AppendLine(" CASE WHEN LEN(ISNULL(CAST(" + clsSettings.upc + " AS VARCHAR(50)), '')) > 2 " +          // these 4 brackets might be the error
-                                    " THEN '#' + REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(ISNULL(CAST(" + clsSettings.upc + " AS VARCHAR(50)), '')))), '*', ''), '/', ''), ' ', '') " +
-                                    " ELSE '' END AS upc, ") ;
-
-             // Console.WriteLine(cmdstring.ToString());
-
-
-              cmdstring.AppendLine(" CASE WHEN LEN(ISNULL(CAST(" + clsSettings.sku + " AS VARCHAR(50)), '')) > 0 "  +                   // these 4 brackets might be the error
-                                   " THEN '#' + REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(ISNULL(CAST(" + clsSettings.sku + " AS VARCHAR(50)), '')))), '*', ''), '/', ''), ' ', '') " +
-                                   " ELSE ''END AS sku, ");    
-               */
 
             cmdstring.AppendLine(" CASE WHEN LEN(ISNULL(CAST(" + clsSettings.upc + " AS VARCHAR(50)), '')) > 2 " +
                                  " THEN '#' + REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(ISNULL(CAST(" + clsSettings.upc + " AS VARCHAR(50)), ''))), '*', ''), '/', ''), ' ', '') "  + "  ELSE '' END AS upc, ");
 
             cmdstring.AppendLine(" CASE WHEN LEN(ISNULL(CAST(" + clsSettings.sku  + " AS VARCHAR(50)), '')) > 0 " +
                                " THEN '#' + REPLACE(REPLACE(REPLACE(LTRIM(RTRIM(ISNULL(CAST(" + clsSettings.sku + " AS VARCHAR(50)), ''))), '*', ''), '/', ''), ' ', '')" + " ELSE '' END AS sku, ");
-
-
-
             if (clsSettings.StaticQuantity)
                 cmdstring.AppendLine(" " + clsSettings.StaticQtyvalue + " as qty, ");
-
-            // common for every store where if quantity is negative  it becomes 0  
-            /*else
-            {
-                cmdstring.AppendLine(" CASE WHEN ISNULL(TRY_CAST(" + clsSettings.Qty + " AS INT),0) < 0 " +
-                         " THEN 0 ELSE ISNULL(TRY_CAST(" + clsSettings.Qty + " AS INT),0) END AS qty, ");
-            }*/
-
-            // Take quantity as it is (-ve,+ve, 0 ) (added for 12499)
             else
             {
 
@@ -300,22 +267,16 @@ namespace Global_MAU
             cmdstring.AppendLine(" ISNULL(" + clsSettings.pcat2 + ", '') AS pcat2, ");
             cmdstring.AppendLine(" ISNULL(" + clsSettings.country + ", '') AS country, ");
             cmdstring.AppendLine(" ISNULL(" + clsSettings.region + ", '') AS region, ");
-            cmdstring.AppendLine(" CASE WHEN " + clsSettings.Discountable + " IS NULL THEN 0 ELSE " + clsSettings.Discountable + " END AS Discountable,  ");
+            cmdstring.AppendLine(" CASE WHEN " + clsSettings.Discountable + " IS NULL THEN '0' ELSE " + clsSettings.Discountable + " END AS Discountable,  ");
             cmdstring.AppendLine(" CAST(ISNULL(TRY_CAST(" + clsSettings.cost + " AS DECIMAL(18,2)),0) " +
                          " + ISNULL(TRY_CAST(" + clsSettings.cost + " AS DECIMAL(18,2)),0) " +
                          " AS DECIMAL(18,2)) AS Cost ");
             cmdstring.AppendLine(" FROM " + clsSettings.TableName + "  ");
             cmdstring.AppendLine(" WHERE " + clsSettings.Price + " > 0 ");
-            if (!string.IsNullOrEmpty(clsSettings.Condition)) 
-                cmdstring.AppendLine(" and " + " " + clsSettings.Condition +  strStock + strcats);   
-            else if ((string.IsNullOrEmpty(strcats) && string.IsNullOrEmpty(strStock)))
-                cmdstring.AppendLine("");
+            if (string.IsNullOrEmpty(clsSettings.Condition))
+                cmdstring.AppendLine(" " + strcats + strStock);
             else
-            {
-
-                cmdstring.AppendLine(" and " + " " + strStock + strcats);
-            }
-
+                cmdstring.AppendLine(" and " + clsSettings.Condition + " "+ strcats + strStock);
 
 
             // Execute query
@@ -345,7 +306,7 @@ namespace Global_MAU
                     continue;
                 }
                 pd.Qty = Convert.ToInt32(dt["qty"]);
-                if (storeid=="12499")
+                if (clsSettings.NegativeQTY_to_Positive)
                 {
                     //pd.Qty =Convert.ToInt32( Regex.Replace(pd.Qty.ToString(), @"-", "") );  
                     pd.Qty = Math.Abs(pd.Qty);   // -ve to  +ve 
@@ -382,15 +343,17 @@ namespace Global_MAU
 
                 if (!string.IsNullOrEmpty(clsSettings.Discountable))
                 {
-
+                    if (POSName == "NCR Counterpoint")
+                    {
+                        if (dt["Discountable"].ToString().ToUpper() == "Y")
+                            pd.Discountable = 1;
+                        else if (dt["Discountable"].ToString().ToUpper() == "N")
+                            pd.Discountable = 0;
+                    }
                 }
                 pd.deposit = depositCategories.Any(x => x.catname == dt["pcat"].ToString())? Convert.ToDecimal(dt["deposit"]): 0;
-                //  pd.deposit = Convert.ToDecimal(dt["deposit"]);
 
                 //fullname file 
-
-                /*fn.upc = dt["upc"].ToString();
-                fn.sku = dt["sku"].ToString().Trim();*/
 
                 fn.upc = Regex.Replace(dt["upc"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
                 fn.sku = Regex.Replace(dt["sku"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
@@ -409,6 +372,11 @@ namespace Global_MAU
                 fn.region = dt["region"].ToString();
                 fn.country = dt["country"].ToString();
 
+                if (clsSettings.RoundUpPrice)
+                {
+                    pd.Price = Math.Floor(pd.Price) + 0.99m;
+                    fn.Price = pd.Price;
+                }
                 if (pd.Price > 0)
                 {
                     pdf.Add(pd);

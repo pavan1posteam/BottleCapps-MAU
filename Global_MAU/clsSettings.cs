@@ -65,6 +65,8 @@ namespace Global_MAU
         public static string Condition { get; set; }
         public static bool StaticQuantity { set; get; }
         public static bool QtyPerPack { set; get; }
+        public static bool NegativeQTY_to_Positive { set; get; }
+        public static bool RoundUpPrice { set; get; }
         public static string cost { set; get; }
         public static string LastPOSName { set; get; }
         public static int LastPOSIndex { get; set; }
@@ -129,19 +131,10 @@ namespace Global_MAU
             if (File.Exists(queryFilePath))
             {
 
-               // string json = File.ReadAllText(queryFilePath, Encoding.UTF8);  
-
 
                 Dictionary<string, clsQuery> allQueries = JsonConvert.DeserializeObject<Dictionary<string, clsQuery>>(
                     File.ReadAllText(queryFilePath, Encoding.UTF8)
                 ) ?? new Dictionary<string, clsQuery>();
-
-
-                //  masterQuery = JsonConvert.DeserializeObject<MasterQuery>(File.ReadAllText(queryFilePath, Encoding.UTF8)) ?? new MasterQuery();
-
-
-
-
                 string posKey = LastPOSName?.Trim();
                 if (!string.IsNullOrWhiteSpace(posKey) &&  allQueries.TryGetValue(posKey, out clsQuery loadedquery))
                 {
@@ -179,8 +172,8 @@ namespace Global_MAU
             StaticQuantity = query.StaticQuantity;
             QtyPerPack = query.QtyPerPack;
             cost= query.cost;
-
-
+            NegativeQTY_to_Positive = query.Negative2Positive;
+            RoundUpPrice = query.RoundUpP;
         }
 
 

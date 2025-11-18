@@ -50,6 +50,8 @@ namespace Global_MAU
                 CheckStaticQTY.Checked = clsSettings.StaticQuantity;
                 CheckQTYPack.Checked = clsSettings.QtyPerPack;
                 txtCost.Text = clsSettings.cost;
+                chkNegtoPos.Checked = clsSettings.NegativeQTY_to_Positive;
+                chkRoundupprice.Checked = clsSettings.RoundUpPrice;
                 if (CheckStaticQTY.Checked)
                 {
                     txtStaticQty.Text = clsSettings.StaticQtyvalue;
@@ -121,8 +123,8 @@ namespace Global_MAU
             }
 
             query.QtyPerPack = CheckQTYPack.Checked;
-
-            
+            query.Negative2Positive = chkNegtoPos.Checked;
+            query.RoundUpP = chkRoundupprice.Checked;
 
             string queryFile = "config/query.txt";
             Dictionary<string, clsQuery> allQueries;

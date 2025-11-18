@@ -29,6 +29,8 @@
     "Condition": "a.price > 0 and a.IsDeleted = 0  and   a.In_Stock != '0' ",
     "StaticQuantity": false,
     "QtyPerPack": false,
+    "Negative2Positive": false,
+    "RoundUpP": false,
     "cost": "N/A"
   },
   "POSMatic": {
@@ -61,6 +63,8 @@
     "Condition": "N/A",
     "StaticQuantity": false,
     "QtyPerPack": false,
+    "Negative2Positive": false,
+    "RoundUpP": false,
     "cost": "N/A"
   },
   "EBS": {
@@ -93,6 +97,8 @@
     "Condition": "Bar_Code is not null and (LTRIM(RTRIM(Bar_Code )) != '' or LTRIM(RTRIM(PLU)) != '')  ",
     "StaticQuantity": false,
     "QtyPerPack": false,
+    "Negative2Positive": false,
+    "RoundUpP": false,
     "cost": "N/A"
   },
   "TigerPOS": {
@@ -125,6 +131,8 @@
     "Condition": " IsNumeric(i.ItemScanID) > 0",
     "StaticQuantity": false,
     "QtyPerPack": false,
+    "Negative2Positive": false,
+    "RoundUpP": false,
     "cost": "N/A"
   },
   "NCR Counterpoint": {
@@ -145,7 +153,7 @@
     "altupc3": "N/A",
     "altupc4": "N/A",
     "altupc5": "N/A",
-    "Discountable": "N/A",
+    "Discountable": "I.IS_DISCNTBL",
     "pcat": "I.MIX_MATCH_COD",
     "pcat1": "I.Subcat_Cod",
     "pcat2": "N/A",
@@ -157,6 +165,8 @@
     "Condition": "B.BARCOD != '' and B.BARCOD IS Not Null ",
     "StaticQuantity": false,
     "QtyPerPack": false,
+    "Negative2Positive": false,
+    "RoundUpP": false,
     "cost": "N/A"
   },
   "PosNation/Cap": {
@@ -189,6 +199,8 @@
     "Condition": "N/A",
     "StaticQuantity": false,
     "QtyPerPack": false,
+    "Negative2Positive": false,
+    "RoundUpP": false,
     "cost": "Cost"
   },
   "MicrosoftDynamics": {
@@ -221,6 +233,8 @@
     "Condition": "N/A",
     "StaticQuantity": false,
     "QtyPerPack": false,
+    "Negative2Positive": false,
+    "RoundUpP": false,
     "cost": "N/A"
   }
 }

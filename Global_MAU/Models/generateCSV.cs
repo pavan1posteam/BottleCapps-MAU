@@ -24,7 +24,7 @@ namespace Global_MAU.Models
             }
             string filename = $"{name}{storeId}{DateTime.Now:yyyyMMddHHmmss}.csv";
             string filePath = Path.Combine(uploadPath, filename);
-
+            
             Type t = list[0].GetType();
             string newLine = Environment.NewLine;
 

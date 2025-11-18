@@ -37,7 +37,8 @@ namespace Global_MAU.Models
         public string Condition { get; set; }
         public bool StaticQuantity { set; get; }
         public bool QtyPerPack { set; get; }
-
+        public bool Negative2Positive { get; set; }
+        public bool RoundUpP { get; set; }
         public string cost { set; get; }
 
         //public string Active_Pos_Name { set; get; }
