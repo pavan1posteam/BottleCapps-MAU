@@ -153,7 +153,7 @@
     "altupc3": "N/A",
     "altupc4": "N/A",
     "altupc5": "N/A",
-    "Discountable": "I.IS_DISCNTBL",
+    "Discountable": "I.PROF_COD_1",
     "pcat": "I.MIX_MATCH_COD",
     "pcat1": "I.Subcat_Cod",
     "pcat2": "N/A",
