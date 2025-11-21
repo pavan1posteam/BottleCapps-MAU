@@ -41,11 +41,13 @@ C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\obj\Debug\Global_MAU.csproj.CoreCo
 C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\obj\Debug\Global_MAU.csproj.CopyComplete
 C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\obj\Debug\Global_MAU.exe
 C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\obj\Debug\Global_MAU.pdb
+C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\obj\Debug\Global_MAU.csproj.AssemblyReference.cache
 D:\Bottlecapps\Global_MAU\Global_MAU\bin\Debug\Global_MAU.exe.config
 D:\Bottlecapps\Global_MAU\Global_MAU\bin\Debug\Global_MAU.exe
 D:\Bottlecapps\Global_MAU\Global_MAU\bin\Debug\Global_MAU.pdb
 D:\Bottlecapps\Global_MAU\Global_MAU\bin\Debug\Newtonsoft.Json.dll
 D:\Bottlecapps\Global_MAU\Global_MAU\bin\Debug\Newtonsoft.Json.xml
+D:\Bottlecapps\Global_MAU\Global_MAU\obj\Debug\Global_MAU.csproj.AssemblyReference.cache
 D:\Bottlecapps\Global_MAU\Global_MAU\obj\Debug\Global_MAU.BottleCapps.resources
 D:\Bottlecapps\Global_MAU\Global_MAU\obj\Debug\Global_MAU.FormSetting.resources
 D:\Bottlecapps\Global_MAU\Global_MAU\obj\Debug\Global_MAU.Properties.Resources.resources
@@ -55,4 +57,3 @@ D:\Bottlecapps\Global_MAU\Global_MAU\obj\Debug\Global_MAU.csproj.CoreCompileInpu
 D:\Bottlecapps\Global_MAU\Global_MAU\obj\Debug\Global_MAU.csproj.CopyComplete
 D:\Bottlecapps\Global_MAU\Global_MAU\obj\Debug\Global_MAU.exe
 D:\Bottlecapps\Global_MAU\Global_MAU\obj\Debug\Global_MAU.pdb
-C:\Bottlecapps\MAU\BottleCapps-MAU\Global_MAU\obj\Debug\Global_MAU.csproj.AssemblyReference.cache
