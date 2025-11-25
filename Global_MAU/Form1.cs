@@ -185,7 +185,7 @@ namespace Global_MAU
             decimal markup = clsSettings.MarkUpPrice;
             decimal deposit = clsSettings.Deposit;
             string POSName = clsSettings.LastPOSName;
-
+            var Discountcolumn = clsSettings.Discountable;
             if (clsSettings.uom.Equals("N/A"))
                 clsSettings.uom = "''";
             if (clsSettings.pack.Equals("N/A"))
@@ -291,102 +291,205 @@ namespace Global_MAU
             }
             List<ProductModel> pdf = new List<ProductModel>();
             List<FullNameModel> fnf = new List<FullNameModel>();
-            // Process results
-            foreach (DataRow dt in dtresult.Rows)
+            List<ProductModelwithDiscountable> pdfd = new List<ProductModelwithDiscountable>();
+            if (Discountcolumn.Equals("N/A"))
             {
-                ProductModel pd = new ProductModel();
-                FullNameModel fn = new FullNameModel();
-                pd.StoreID = Convert.ToInt32(clsSettings.StoreID);
-                
+                foreach (DataRow dt in dtresult.Rows)
+                {
+                    var pd = new ProductModel();
+                    FullNameModel fn = new FullNameModel();
+                    pd.StoreID = Convert.ToInt32(clsSettings.StoreID);
 
-                pd.upc = Regex.Replace(dt["upc"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
-                pd.sku = Regex.Replace(dt["sku"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
-                if (String.IsNullOrEmpty(pd.upc))
-                {
-                    continue;
-                }
-                pd.Qty = Convert.ToInt32(dt["qty"]);
-                if (clsSettings.NegativeQTY_to_Positive)
-                {
-                    //pd.Qty =Convert.ToInt32( Regex.Replace(pd.Qty.ToString(), @"-", "") );  
-                    pd.Qty = Math.Abs(pd.Qty);   // -ve to  +ve 
-                }
-                pd.StoreProductName = dt["StoreProductName"].ToString();
-                pd.StoreDescription = dt["StoreProductName"].ToString();
 
-                pd.pack = Convert.ToInt32(dt["pack"].ToString());
-                if (pd.pack==1 || pd.pack ==0)
-                {
-                    pd.pack = getpack(dt["StoreProductName"].ToString());
-                }
-                pd.uom = dt["uom"].ToString();
-                if (string.IsNullOrEmpty(pd.uom) || pd.uom == "0")
-                {
-                    pd.uom = getVolume(dt["StoreProductName"].ToString());
-                }
-                pd.Price = Convert.ToDecimal(dt["price"]);
-                pd.sprice = Convert.ToDecimal(dt["Sprice"]);
-                if (pd.sprice > 0)
-                {
-                    pd.Start = dt["startdate"].ToString();
-                    pd.End = dt["enddate"].ToString();
-                }
-                if (clsSettings.QtyPerPack)
-                    pd.Qty = pd.Qty / pd.pack; 
-
-                pd.Tax = Convert.ToDecimal(clsSettings.Tax);
-                pd.altupc1 = dt["altupc1"].ToString();
-                pd.altupc2 = dt["altupc2"].ToString();
-                pd.altupc3 = dt["altupc3"].ToString();
-                pd.altupc4 = dt["altupc4"].ToString();
-                pd.altupc5 = dt["altupc5"].ToString();
-
-                if (!string.IsNullOrEmpty(clsSettings.Discountable))
-                {
-                    if (POSName == "NCR Counterpoint")
+                    pd.upc = Regex.Replace(dt["upc"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+                    pd.sku = Regex.Replace(dt["sku"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+                    if (String.IsNullOrEmpty(pd.upc))
                     {
-                        if (dt["Discountable"].ToString().ToUpper() == "Y")
-                            pd.Discountable = 1;
-                        else if (dt["Discountable"].ToString().ToUpper() == "N")
-                            pd.Discountable = 0;
+                        continue;
                     }
+                    pd.Qty = Convert.ToInt32(dt["qty"]);
+                    if (clsSettings.NegativeQTY_to_Positive)
+                    {
+                        //pd.Qty =Convert.ToInt32( Regex.Replace(pd.Qty.ToString(), @"-", "") );  
+                        pd.Qty = Math.Abs(pd.Qty);   // -ve to  +ve 
+                    }
+                    pd.StoreProductName = dt["StoreProductName"].ToString();
+                    pd.StoreDescription = dt["StoreProductName"].ToString();
+
+                    pd.pack = Convert.ToInt32(dt["pack"].ToString());
+                    if (pd.pack == 1 || pd.pack == 0)
+                    {
+                        pd.pack = getpack(dt["StoreProductName"].ToString());
+                    }
+                    pd.uom = dt["uom"].ToString();
+                    if (string.IsNullOrEmpty(pd.uom) || pd.uom == "0")
+                    {
+                        pd.uom = getVolume(dt["StoreProductName"].ToString());
+                    }
+                    pd.Price = Convert.ToDecimal(dt["price"]);
+                    pd.sprice = Convert.ToDecimal(dt["Sprice"]);
+                    if (pd.sprice > 0)
+                    {
+                        pd.Start = dt["startdate"].ToString();
+                        pd.End = dt["enddate"].ToString();
+                    }
+                    if (clsSettings.QtyPerPack)
+                        pd.Qty = pd.Qty / pd.pack;
+
+                    pd.Tax = Convert.ToDecimal(clsSettings.Tax);
+                    pd.altupc1 = dt["altupc1"].ToString();
+                    pd.altupc2 = dt["altupc2"].ToString();
+                    pd.altupc3 = dt["altupc3"].ToString();
+                    pd.altupc4 = dt["altupc4"].ToString();
+                    pd.altupc5 = dt["altupc5"].ToString();
+
+                    //if (!string.IsNullOrEmpty(clsSettings.Discountable))
+                    //{
+                    //    if (POSName == "NCR Counterpoint")
+                    //    {
+                    //        if (dt["Discountable"].ToString().ToUpper() == "Y")
+                    //            pd.Discountable = 1;
+                    //        else if (dt["Discountable"].ToString().ToUpper() == "N")
+                    //            pd.Discountable = 0;
+                    //    }
+                    //}
+                    pd.deposit = depositCategories.Any(x => x.catname == dt["pcat"].ToString()) ? Convert.ToDecimal(dt["deposit"]) : 0;
+
+                    //fullname file 
+
+                    fn.upc = Regex.Replace(dt["upc"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+                    fn.sku = Regex.Replace(dt["sku"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+                    if (String.IsNullOrEmpty(fn.upc))
+                    {
+                        continue;
+                    }
+                    fn.pname = pd.StoreProductName;
+                    fn.pdesc = pd.StoreDescription;
+                    fn.Price = Convert.ToDecimal(dt["price"]);
+                    fn.pack = pd.pack;
+                    fn.uom = pd.uom;
+                    fn.pcat = dt["pcat"].ToString();
+                    fn.pcat1 = dt["pcat1"].ToString();
+                    fn.pcat2 = dt["pcat2"].ToString();
+                    fn.region = dt["region"].ToString();
+                    fn.country = dt["country"].ToString();
+
+                    if (clsSettings.RoundUpPrice)
+                    {
+                        pd.Price = Math.Floor(pd.Price) + 0.99m;
+                        fn.Price = pd.Price;
+                    }
+                    if (pd.Price > 0)
+                    {
+                        pdf.Add(pd);
+                        fnf.Add(fn);
+                    }
+
                 }
-                pd.deposit = depositCategories.Any(x => x.catname == dt["pcat"].ToString())? Convert.ToDecimal(dt["deposit"]): 0;
-
-                //fullname file 
-
-                fn.upc = Regex.Replace(dt["upc"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
-                fn.sku = Regex.Replace(dt["sku"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
-                if (String.IsNullOrEmpty(fn.upc))
+            }
+            else
+            {
+                foreach (DataRow dt in dtresult.Rows)
                 {
-                    continue;
-                }
-                fn.pname = pd.StoreProductName;
-                fn.pdesc = pd.StoreDescription;
-                fn.Price = Convert.ToDecimal(dt["price"]);
-                fn.pack = pd.pack;
-                fn.uom = pd.uom;
-                fn.pcat = dt["pcat"].ToString();
-                fn.pcat1 = dt["pcat1"].ToString();
-                fn.pcat2 = dt["pcat2"].ToString();
-                fn.region = dt["region"].ToString();
-                fn.country = dt["country"].ToString();
+                    var pd = new ProductModelwithDiscountable();
+                    FullNameModel fn = new FullNameModel();
+                    pd.StoreID = Convert.ToInt32(clsSettings.StoreID);
+                    pd.upc = Regex.Replace(dt["upc"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+                    pd.sku = Regex.Replace(dt["sku"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+                    if (String.IsNullOrEmpty(pd.upc))
+                    {
+                        continue;
+                    }
+                    pd.Qty = string.IsNullOrEmpty(dt["qty"].ToString()) ? 0 : Convert.ToInt32(dt["qty"]);
+                    if (clsSettings.NegativeQTY_to_Positive)
+                    { 
+                        pd.Qty = Math.Abs(pd.Qty);    
+                    }
+                    pd.StoreProductName = dt["StoreProductName"].ToString();
+                    pd.StoreDescription = dt["StoreProductName"].ToString();
 
-                if (clsSettings.RoundUpPrice)
-                {
-                    pd.Price = Math.Floor(pd.Price) + 0.99m;
-                    fn.Price = pd.Price;
-                }
-                if (pd.Price > 0)
-                {
-                    pdf.Add(pd);
-                    fnf.Add(fn);
-                }
+                    pd.pack = Convert.ToInt32(dt["pack"].ToString());
+                    if (pd.pack == 1 || pd.pack == 0)
+                    {
+                        pd.pack = getpack(dt["StoreProductName"].ToString());
+                    }
+                    pd.uom = dt["uom"].ToString();
+                    if (string.IsNullOrEmpty(pd.uom) || pd.uom == "0")
+                    {
+                        pd.uom = getVolume(dt["StoreProductName"].ToString());
+                    }
+                    pd.Price = Convert.ToDecimal(dt["price"]);
+                    pd.sprice = Convert.ToDecimal(dt["Sprice"]);
+                    if (pd.sprice > 0)
+                    {
+                        pd.Start = dt["startdate"].ToString();
+                        pd.End = dt["enddate"].ToString();
+                    }
+                    if (clsSettings.QtyPerPack)
+                        pd.Qty = pd.Qty / pd.pack;
 
+                    pd.Tax = Convert.ToDecimal(clsSettings.Tax);
+                    pd.altupc1 = dt["altupc1"].ToString();
+                    pd.altupc2 = dt["altupc2"].ToString();
+                    pd.altupc3 = dt["altupc3"].ToString();
+                    pd.altupc4 = dt["altupc4"].ToString();
+                    pd.altupc5 = dt["altupc5"].ToString();
+
+                    if (!string.IsNullOrEmpty(clsSettings.Discountable))
+                    {
+                        if (POSName == "NCR Counterpoint")
+                        {
+                            if (dt["Discountable"].ToString().ToUpper() == "Y")
+                                pd.Discountable = 1;
+                            else if (dt["Discountable"].ToString().ToUpper() == "N")
+                                pd.Discountable = 0;
+                        }
+                    }
+                    pd.deposit = depositCategories.Any(x => x.catname == dt["pcat"].ToString()) ? Convert.ToDecimal(dt["deposit"]) : 0;
+
+                    //fullname file 
+
+                    fn.upc = Regex.Replace(dt["upc"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+                    fn.sku = Regex.Replace(dt["sku"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+                    if (String.IsNullOrEmpty(fn.upc))
+                    {
+                        continue;
+                    }
+                    fn.pname = pd.StoreProductName;
+                    fn.pdesc = pd.StoreDescription;
+                    fn.Price = Convert.ToDecimal(dt["price"]);
+                    fn.pack = pd.pack;
+                    fn.uom = pd.uom;
+                    fn.pcat = dt["pcat"].ToString();
+                    fn.pcat1 = dt["pcat1"].ToString();
+                    fn.pcat2 = dt["pcat2"].ToString();
+                    fn.region = dt["region"].ToString();
+                    fn.country = dt["country"].ToString();
+
+                    if (clsSettings.RoundUpPrice)
+                    {
+                        pd.Price = Math.Floor(pd.Price) + 0.99m;
+                        fn.Price = pd.Price;
+                    }
+                    if (pd.Price > 0)
+                    {
+                        pdfd.Add(pd);
+                        fnf.Add(fn);
+                    }
+
+                }
             }
 
             showstatus("Generating csv file");
-            string productFile = generateCSV.GenerateCSVFile(pdf, "Product", Convert.ToInt32(clsSettings.StoreID));
+            string productFile;
+            if (Discountcolumn.Equals("N/A"))
+            {
+                productFile = generateCSV.GenerateCSVFile(pdf, "Product", Convert.ToInt32(clsSettings.StoreID));
+            }
+            else
+            {
+                productFile = generateCSV.GenerateCSVFile(pdfd, "Product", Convert.ToInt32(clsSettings.StoreID));
+            }
             string fullnameFile = generateCSV.GenerateCSVFile(fnf, "FullName", Convert.ToInt32(clsSettings.StoreID));
 
             showstatus($"Generated: {productFile} and {fullnameFile}");
