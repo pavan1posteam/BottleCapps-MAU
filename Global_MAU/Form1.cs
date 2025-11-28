@@ -313,19 +313,32 @@ namespace Global_MAU
                         //pd.Qty =Convert.ToInt32( Regex.Replace(pd.Qty.ToString(), @"-", "") );  
                         pd.Qty = Math.Abs(pd.Qty);   // -ve to  +ve 
                     }
-                    pd.StoreProductName = dt["StoreProductName"].ToString();
-                    pd.StoreDescription = dt["StoreProductName"].ToString();
+                    pd.StoreProductName = dt["StoreProductName"].ToString().Trim().Trim('"');
+                    pd.StoreDescription = dt["StoreProductName"].ToString().Trim().Trim('"');
 
                     pd.pack = Convert.ToInt32(dt["pack"].ToString());
                     if (pd.pack == 1 || pd.pack == 0)
                     {
                         pd.pack = getpack(dt["StoreProductName"].ToString());
                     }
+
+                    // experimenting 
+                    /*pd.uom = dt["uom"] == DBNull.Value? "" : dt["uom"].ToString().Trim();
+
+                    if (string.IsNullOrWhiteSpace(pd.uom) || pd.uom == "0")
+                    {
+                        pd.uom = getVolume(dt["StoreProductName"].ToString());
+                    }*/
+
                     pd.uom = dt["uom"].ToString();
                     if (string.IsNullOrEmpty(pd.uom) || pd.uom == "0")
                     {
                         pd.uom = getVolume(dt["StoreProductName"].ToString());
                     }
+
+
+
+
                     pd.Price = Convert.ToDecimal(dt["price"]);
                     pd.sprice = Convert.ToDecimal(dt["Sprice"]);
                     if (pd.sprice > 0)
@@ -357,8 +370,12 @@ namespace Global_MAU
 
                     //fullname file 
 
-                    fn.upc = Regex.Replace(dt["upc"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
-                    fn.sku = Regex.Replace(dt["sku"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+                     fn.upc = Regex.Replace(dt["upc"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+                      fn.sku = Regex.Replace(dt["sku"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+
+                    /*fn.upc = pd.upc;
+                    fn.sku = pd.sku;*/
+
                     if (String.IsNullOrEmpty(fn.upc))
                     {
                         continue;
@@ -405,8 +422,8 @@ namespace Global_MAU
                     { 
                         pd.Qty = Math.Abs(pd.Qty);    
                     }
-                    pd.StoreProductName = dt["StoreProductName"].ToString();
-                    pd.StoreDescription = dt["StoreProductName"].ToString();
+                    pd.StoreProductName = dt["StoreProductName"].ToString().Trim().Trim('"');
+                    pd.StoreDescription = dt["StoreProductName"].ToString().Trim().Trim('"');
 
                     pd.pack = Convert.ToInt32(dt["pack"].ToString());
                     if (pd.pack == 1 || pd.pack == 0)
