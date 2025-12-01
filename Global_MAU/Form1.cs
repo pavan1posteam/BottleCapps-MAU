@@ -322,16 +322,12 @@ namespace Global_MAU
                         pd.pack = getpack(dt["StoreProductName"].ToString());
                     }
 
-                    // experimenting 
-                    /*pd.uom = dt["uom"] == DBNull.Value? "" : dt["uom"].ToString().Trim();
+                    //  pd.uom = dt["uom"].ToString(); // old upto 30-11-25 
+
+                    //from 01-12-25
+                    pd.uom = dt["uom"] == DBNull.Value ? "" : dt["uom"].ToString().Trim();
 
                     if (string.IsNullOrWhiteSpace(pd.uom) || pd.uom == "0")
-                    {
-                        pd.uom = getVolume(dt["StoreProductName"].ToString());
-                    }*/
-
-                    pd.uom = dt["uom"].ToString();
-                    if (string.IsNullOrEmpty(pd.uom) || pd.uom == "0")
                     {
                         pd.uom = GetVolume(dt["StoreProductName"].ToString());
                     }
@@ -370,8 +366,8 @@ namespace Global_MAU
 
                     //fullname file 
 
-                     fn.upc = Regex.Replace(dt["upc"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
-                      fn.sku = Regex.Replace(dt["sku"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+                    fn.upc = Regex.Replace(dt["upc"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+                    fn.sku = Regex.Replace(dt["sku"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
 
                     /*fn.upc = pd.upc;
                     fn.sku = pd.sku;*/
@@ -412,7 +408,7 @@ namespace Global_MAU
                     FullNameModel fn = new FullNameModel();
                     pd.StoreID = Convert.ToInt32(clsSettings.StoreID);
                     pd.upc = Regex.Replace(dt["upc"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
-                    pd.sku = Regex.Replace(dt["sku"].ToString().Trim(), @"[^#0-9A-Za-z]", "");
+                    pd.sku = Regex.Replace(dt["sku"].ToString().Trim(), @"[^#0-9A-Za-z]", "") ;
                     if (String.IsNullOrEmpty(pd.upc))
                     {
                         continue;
@@ -430,8 +426,12 @@ namespace Global_MAU
                     {
                         pd.pack = getpack(dt["StoreProductName"].ToString());
                     }
-                    pd.uom = dt["uom"].ToString();
-                    if (string.IsNullOrEmpty(pd.uom) || pd.uom == "0")
+                    //  pd.uom = dt["uom"].ToString(); // old upto 30-11-25 
+
+                    //from 01-12-25
+                    pd.uom = dt["uom"] == DBNull.Value ? "" : dt["uom"].ToString().Trim();
+
+                    if (string.IsNullOrWhiteSpace(pd.uom) || pd.uom == "0")
                     {
                         pd.uom = GetVolume(dt["StoreProductName"].ToString());
                     }
@@ -608,6 +608,8 @@ namespace Global_MAU
             }
             return 1;
         }
+
+        // By pavan 
         /*public string getVolume(string prodName)
         {
             prodName = prodName.ToUpper();
@@ -620,7 +622,7 @@ namespace Global_MAU
             return "";
         }   */
 
-        // new get volume to handle spaces and decimals 
+        // New get volume to handle spaces and decimals 
         public string GetVolume(string prodName)
         {
             if (string.IsNullOrWhiteSpace(prodName))
