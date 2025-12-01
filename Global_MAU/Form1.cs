@@ -333,7 +333,7 @@ namespace Global_MAU
                     pd.uom = dt["uom"].ToString();
                     if (string.IsNullOrEmpty(pd.uom) || pd.uom == "0")
                     {
-                        pd.uom = getVolume(dt["StoreProductName"].ToString());
+                        pd.uom = GetVolume(dt["StoreProductName"].ToString());
                     }
 
 
@@ -433,7 +433,7 @@ namespace Global_MAU
                     pd.uom = dt["uom"].ToString();
                     if (string.IsNullOrEmpty(pd.uom) || pd.uom == "0")
                     {
-                        pd.uom = getVolume(dt["StoreProductName"].ToString());
+                        pd.uom = GetVolume(dt["StoreProductName"].ToString());
                     }
                     pd.Price = Convert.ToDecimal(dt["price"]);
                     pd.sprice = Convert.ToDecimal(dt["Sprice"]);
@@ -608,7 +608,7 @@ namespace Global_MAU
             }
             return 1;
         }
-        public string getVolume(string prodName)
+        /*public string getVolume(string prodName)
         {
             prodName = prodName.ToUpper();
             var regexMatch = Regex.Match(prodName, @"(?<Result>\d+)ML| (?<Result>\d+)LTR| (?<Result>\d+)OZ | (?<Result>\d+)L");
@@ -618,7 +618,27 @@ namespace Global_MAU
                 return regexMatch.ToString();
             }
             return "";
+        }   */
+
+        // new get volume to handle spaces and decimals 
+        public string GetVolume(string prodName)
+        {
+            if (string.IsNullOrWhiteSpace(prodName))
+                return "";
+            prodName = prodName.ToUpper();
+            var m = Regex.Match(prodName, @"\b(?<qty>\d+(?:\.\d+)?)\s*(?<unit>ML|LTR|L|OZ)\b");
+            if (!m.Success)
+                return "";
+            var qty = m.Groups["qty"].Value;
+            var unit = m.Groups["unit"].Value;
+
+            // for handling litre possiblities still under developing
+            if (unit == "LTR" || unit == "L")
+                unit = "L";
+
+            return qty + unit;
         }
+
         public int ParseIntValue(string val)
         {
             int outVal = 0;
