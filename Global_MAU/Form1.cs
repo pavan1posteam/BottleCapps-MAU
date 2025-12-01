@@ -322,7 +322,7 @@ namespace Global_MAU
                         pd.pack = getpack(dt["StoreProductName"].ToString());
                     }
 
-                    //  pd.uom = dt["uom"].ToString(); // old upto 30-11-25 
+                    /*   pd.uom = dt["uom"].ToString(); */  //old upto 30-11-25 
 
                     //from 01-12-25
                     pd.uom = dt["uom"] == DBNull.Value ? "" : dt["uom"].ToString().Trim();
