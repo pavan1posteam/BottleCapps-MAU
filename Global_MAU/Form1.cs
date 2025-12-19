@@ -24,7 +24,7 @@ namespace Global_MAU
 
         private static string Argsprams { get; set; }
 
-         
+         //checking 
         
         public BottleCapps(string[] args)
         {
