@@ -1,1 +1,0 @@
-{"StoreID":"00000","stockeditems":0,"NoWebSale":0,"server":"54.174.152.95","userid":"AAAStore_10000","pwd":"A5t0r3@10000","upfolder":"Upload","Tax":"0.09","MarkUpPrice":0.0,"Deposit":0.0,"POSName":"NCR Counterpoint"}
