@@ -159,7 +159,8 @@ namespace Global_MAU
             "MicrosoftDynamics",
             "PosNation/Cap",
             "1st_POS",
-            "RMH"});
+            "RMH",
+            "Crony"});
             this.comboBox1.Location = new System.Drawing.Point(146, 31);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(150, 21);

@@ -313,6 +313,7 @@ namespace Global_MAU
                         //pd.Qty =Convert.ToInt32( Regex.Replace(pd.Qty.ToString(), @"-", "") );  
                         pd.Qty = Math.Abs(pd.Qty);   // -ve to  +ve 
                     }
+                    
                     pd.StoreProductName = dt["StoreProductName"].ToString().Trim().Trim('"');
                     pd.StoreDescription = dt["StoreProductName"].ToString().Trim().Trim('"');
 
@@ -386,6 +387,18 @@ namespace Global_MAU
                     fn.pcat2 = dt["pcat2"].ToString();
                     fn.region = dt["region"].ToString();
                     fn.country = dt["country"].ToString();
+
+                    // static qty for tobbaco products for below stores
+                    if (storeid == "10984" || storeid == "10917")
+                    {
+                        if (fn.pcat.ToUpper().Contains("TOBACCO") ||
+                             fn.pcat.ToUpper().Contains("CIGAR") ||
+                             fn.pcat.ToUpper().Contains("THC"))
+                        {
+                            pd.Qty = 999;
+                        }
+                    }
+
 
                     if (clsSettings.RoundUpPrice)
                     {
@@ -482,6 +495,19 @@ namespace Global_MAU
                     fn.pcat2 = dt["pcat2"].ToString();
                     fn.region = dt["region"].ToString();
                     fn.country = dt["country"].ToString();
+
+                    // static qty for tobbaco products for below stores
+                    if (storeid == "10984" || storeid == "10917")
+                    {
+                        if (fn.pcat.ToUpper().Contains("TOBACCO") ||
+                             fn.pcat.ToUpper().Contains("CIGAR") ||
+                             fn.pcat.ToUpper().Contains("THC"))
+                        {
+                            pd.Qty = 999;
+                        }
+                    }
+
+
 
                     if (clsSettings.RoundUpPrice)
                     {
